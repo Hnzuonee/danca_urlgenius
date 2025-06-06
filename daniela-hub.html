@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="cs"><head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozcestník | Daniela</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { /* Nová barevná paleta */
+            --d-bg: #1A1A2E; --d-surface: #16213E; --d-text: #EFEFEF;
+            --d-accent: #E94560; --d-accent-hover: #F05972;
+            --d-text-muted: #949494; --d-border: #0F3460;
+            --d-surface-alt: #0F3460; --d-surface-alt-hover: #1E497A;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; display: flex; align-items: center; justify-content: center;
+               min-height: 100vh; background-color: var(--d-bg); color: var(--d-text); text-align: center; padding: 1rem; }
+        .d-hub-panel { background-color: var(--d-surface); padding: 2rem; border-radius: 1.5rem;
+                       box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: 450px; width: 100%;
+                       display: flex; flex-direction: column; align-items: center; border: 1px solid var(--d-border); }
+        .d-profile-photo { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--d-accent);
+                           object-fit: cover; margin-bottom: 1rem; }
+        .d-profile-name { font-family: 'Montserrat', sans-serif; font-size: 1.75rem; font-weight: 700;
+                          color: var(--d-text); margin-bottom: 0.5rem; }
+        .d-profile-bio { font-size: 1rem; color: var(--d-text-muted); margin-bottom: 1.5rem; }
+        .d-links-list { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
+        .d-link-item { display: block; width: 100%; padding: 1rem; background-color: var(--d-surface-alt);
+                       color: var(--d-text); text-decoration: none; border-radius: 0.75rem; font-size: 1rem;
+                       font-weight: 600; border: 1px solid var(--d-border); transition: all 0.2s ease-in-out; }
+        .d-link-item:hover { background-color: var(--d-surface-alt-hover); transform: translateY(-2px); }
+        .d-link-highlight { background: linear-gradient(135deg, var(--d-accent), var(--d-accent-hover));
+                            color: white; border: none; font-weight: 700; }
+        .d-footer { margin-top: 1.5rem; font-size: 0.75rem; color: var(--d-text-muted); }
+    </style></head><body>
+    <div class="d-hub-panel">
+        <img src="images/daniela-avatar.jpg" alt="Profil Daniela" class="d-profile-photo">
+        <h1 class="d-profile-name">Daniela</h1>
+        <p class="d-profile-bio">Vítej na mém profilu. Všechny odkazy najdeš zde.</p>
+        <div class="d-links-list">
+            <a href="./daniela-verify.html" class="d-link-item d-link-highlight">🔥 Moje exkluzivní zóna (18+)</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="d-link-item">Veřejný Instagram</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="d-link-item">Sleduj mě na TikToku</a>
+        </div>
+        <footer class="d-footer"><p>© <span id="d-year"></span> Daniela</p></footer>
+    </div>
+    <script>document.getElementById('d-year').textContent = new Date().getFullYear();</script></body></html>
