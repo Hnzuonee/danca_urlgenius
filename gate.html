@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="cs"><head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ověření | Terka</title>
+    <script>
+        // --- UNIKÁTNÍ LOGOVACÍ FUNKCE ---
+        (() => {
+            const SESSION_STORAGE_KEY = 'profile_session_key';
+            let sessionKey = sessionStorage.getItem(SESSION_STORAGE_KEY);
+            if (!sessionKey) {
+                sessionKey = self.crypto?.randomUUID() ?? ('session_' + Date.now() + Math.random());
+                sessionStorage.setItem(SESSION_STORAGE_KEY, sessionKey);
+            }
+            window.logUserAction = async (metadata = {}) => {
+                try {
+                    const logData = { session_key: sessionKey, clientAgent: navigator.userAgent,
+                                      source_page: window.location.href, client_timestamp: new Date().toISOString(),
+                                      ...metadata };
+                    await fetch('/.netlify/functions/log-activity', { method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(logData) });
+                } catch (err) { console.warn('Activity logging failed:', err); }
+            }
+        })();
+    </script>
+    <script>
+        // --- SKRIPT PRO BLOKACI V IN-APP PROHLÍŽEČI ---
+        (() => {
+            const isRestrictedClient = /Instagram|FBAN|FBAV/i.test(navigator.userAgent);
+            if (isRestrictedClient) {
+                if (window.logUserAction) window.logUserAction({ activity: 'client_restricted_inapp' });
+                document.write(`<!DOCTYPE html><html lang="cs"><head><title>Chyba</title><style>body{background:#1a1a1a;color:#f0f0f0;font-family:sans-serif;text-align:center;padding:5rem 1rem;}div{margin:auto;max-width:320px;background:#2b2b2b;padding:2rem;border-radius:1rem;}h1{color:#ff7f50;}</style></head><body><div><h1>Chyba zobrazení</h1><p>Otevřete prosím tento odkaz ve vašem běžném internetovém prohlížeči (např. Chrome, Safari).</p></div></body></html>`);
+                if (window.stop) window.stop();
+            }
+        })();
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root { --bg-color: #1a1a1a; --panel-color: #2b2b2b; --font-color: #f0f0f0;
+                --highlight-color: #ff7f50; --highlight-hover: #ff6347;
+                --font-muted-color: #b0b0b0; --outline-color: #3c3c3c;
+                --confirm-color: #34d399; --deny-color: #ef4444; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Roboto', sans-serif; background: var(--bg-color); color: var(--font-color);
+               display: flex; align-items: center; justify-content: center; min-height: 100vh;
+               text-align: center; padding: 1rem; }
+        .check-panel { width: 100%; max-width: 420px; background: var(--panel-color); padding: 2.5rem;
+                       border-radius: 1.5rem; box-shadow: 0 8px 28px rgba(0,0,0,.4);
+                       display: flex; flex-direction: column; align-items: center; }
+        .check-avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+                        border: 3px solid var(--highlight-color); margin-bottom: 1.5rem; }
+        .check-title { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; margin-bottom: 1rem; }
+        .check-description { margin-bottom: 1.5rem; color: var(--font-muted-color); line-height: 1.6; }
+        .check-controls { display: flex; flex-direction: column; width: 100%; gap: 0.75rem; }
+        .control-btn { display: block; width: 100%; padding: 1rem; color: #fff; font-weight: 600;
+                       border: none; border-radius: 0.75rem; font-size: 1rem; font-family: 'Montserrat', sans-serif;
+                       text-decoration: none; cursor: pointer; transition: all .2s; }
+        .control-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-accept { background-color: var(--confirm-color); }
+        .btn-reject { background-color: var(--font-muted-color); }
+        .btn-redirect { background: linear-gradient(135deg, var(--highlight-color), var(--highlight-hover)); }
+        .reject-notice { color: var(--deny-color); font-weight: 600; margin-top: 1rem; }
+        .section-hidden { display: none !important; }
+    </style></head><body>
+    <div class="check-panel">
+        <img src="images/IMG_7187.jpeg" alt="Profil Terka" class="check-avatar">
+        
+        <div id="age-prompt-section">
+          <h1 class="check-title">Vstup pouze pro dospělé</h1>
+          <p class="check-description">Potvrďte prosím, že vám bylo 18 a více let, abyste mohli pokračovat.</p>
+          <div class="check-controls">
+            <button id="confirm-age-button" class="control-btn btn-accept">Ano, je mi 18+</button>
+            <button id="deny-age-button" class="control-btn btn-reject">Ne, není mi 18</button>
+          </div>
+          <p id="rejection-message" class="reject-notice section-hidden">Vstup zamítnut. Přístup je povolen pouze osobám starším 18 let.</p>
+        </div>
+
+        <div id="confirm-success-section" class="section-hidden">
+          <h1 class="check-title">Ověření proběhlo úspěšně</h1>
+          <p class="check-description">Děkujeme. Nyní budete přesměrováni na exkluzivní obsah.</p>
+          <a href="#" id="destination-url-link" class="control-btn btn-redirect" rel="noopener noreferrer" target="_blank">Načítání...</a>
+        </div>
+    </div>
+    <script>
+        (() => {
+          const promptSection = document.getElementById('age-prompt-section');
+          const successSection = document.getElementById('confirm-success-section');
+          const yesButton = document.getElementById('confirm-age-button');
+          const noButton = document.getElementById('deny-age-button');
+          const rejectionNotice = document.getElementById('rejection-message');
+          const redirectLink = document.getElementById('destination-url-link');
+
+          if (window.logUserAction) window.logUserAction({activity: 'verification_page_view'});
+
+          yesButton.addEventListener('click', async () => {
+            promptSection.classList.add('section-hidden');
+            successSection.classList.remove('section-hidden');
+            if (window.logUserAction) window.logUserAction({activity: 'verification_check', verification_response: 'yes'});
+            
+            try {
+                const response = await fetch('/.netlify/functions/get-destination'); 
+                if (!response.ok) throw new Error('Network error');
+                const data = await response.json();
+                
+                if (data.redirectUrl) { // Změněno z data.target na data.redirectUrl
+                    redirectLink.href = data.redirectUrl;
+                    redirectLink.textContent = 'Přejít na můj profil'; 
+                } else { throw new Error('Redirect URL not found in response'); }
+            } catch (err) {
+                redirectLink.textContent = 'Chyba načítání';
+                console.error('Failed to fetch destination URL:', err);
+            }
+          });
+
+          noButton.addEventListener('click', () => {
+            promptSection.querySelector('.check-title').classList.add('section-hidden');
+            promptSection.querySelector('.check-description').classList.add('section-hidden');
+            promptSection.querySelector('.check-controls').classList.add('section-hidden');
+            rejectionNotice.classList.remove('section-hidden');
+            if (window.logUserAction) window.logUserAction({activity: 'verification_check', verification_response: 'no'});
+          });
+        })();
+    </script></body></html>
