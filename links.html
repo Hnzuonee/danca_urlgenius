@@ -1,46 +1,77 @@
-<!DOCTYPE html><html lang="cs"><head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rozcestník | Terka</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #1a1a1a; --panel-color: #2b2b2b; --font-color: #f0f0f0;
-                --highlight-color: #ff7f50; --highlight-hover: #ff6347;
-                --font-muted-color: #b0b0b0; --outline-color: #3c3c3c;
-                --button-bg-color: #3c3c3c; --button-hover-bg: #4d4d4d; }
+        :root {
+            --bg-main: #1c1917; --surface-main: #292524; --text-main: #e7e5e4;
+            --accent-main: #f97316; --accent-hover: #ea580c;
+            --text-secondary: #a8a29e; --border-main: #44403c;
+            --surface-alt: #44403c; --surface-alt-hover: #57534e;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Roboto', sans-serif; display: flex; align-items: center; justify-content: center;
-               min-height: 100vh; background-color: var(--bg-color); color: var(--font-color);
-               text-align: center; padding: 1rem; }
-        .hub-container { background-color: var(--panel-color); padding: 2rem; border-radius: 1.5rem;
-                         box-shadow: 0 10px 30px rgba(0,0,0,0.4); max-width: 450px; width: 100%;
-                         display: flex; flex-direction: column; align-items: center; border: 1px solid var(--outline-color); }
-        .user-avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--highlight-color);
-                       object-fit: cover; margin-bottom: 1rem; }
-        .profile-name { font-family: 'Montserrat', sans-serif; font-size: 1.75rem; font-weight: 700;
-                        color: var(--font-color); margin-bottom: 0.5rem; }
-        .profile-bio { font-size: 1rem; color: var(--font-muted-color); margin-bottom: 1.5rem; }
-        .nav-list { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
-        .link-item { display: block; width: 100%; padding: 1rem; background-color: var(--button-bg-color);
-                     color: var(--font-color); text-decoration: none; border-radius: 0.75rem; font-size: 1rem;
-                     font-weight: 600; border: 1px solid var(--outline-color); transition: all 0.2s ease-in-out; }
-        .link-item:hover { background-color: var(--button-hover-bg); transform: translateY(-2px); }
-        .link-item-special { background: linear-gradient(135deg, var(--highlight-color), var(--highlight-hover));
-                             color: white; border: none; font-weight: 700; }
-        .page-footer { margin-top: 1.5rem; font-size: 0.75rem; color: var(--font-muted-color); }
-    </style></head><body>
-    <div class="hub-container">
-        <img src="images/IMG_1478.JPG" alt="Profil Terka" class="user-avatar">
-        <h1 class="profile-name">Terka</h1>
-        <p class="profile-bio">Vítej. Zde najdeš vše podstatné.</p>
-        <div class="nav-list">
-            
-            <a href="./gate.html" target="_blank" rel="noopener noreferrer" class="link-item link-item-special">Moje exkluzivní tvorba</a>
-            
-            <a href="https://www.youtube.com/watch?v=Ja65iMf4Ors&ab_channel=Datarunlife" target="_blank" rel="noopener noreferrer" class="link-item">Kdo jsem? (Rozhovor)</a>
-            <a href="https://www.youtube.com/shorts/RbatKStCZxo" target="_blank" rel="noopener noreferrer" class="link-item">Sleduj mě na YouTube</a>
-            <a href="https://www.tiktok.com/@terezosladilova/video/7488800063859313942" target="_blank" rel="noopener noreferrer" class="link-item">Ze zákulisí na TikToku</a>
+        body {
+            font-family: 'Lato', sans-serif; display: flex; align-items: center;
+            justify-content: center; min-height: 100vh; background-color: var(--bg-main);
+            color: var(--text-main); text-align: center; padding: 1rem;
+        }
+        .content-module {
+            background-color: var(--surface-main); padding: 2rem; border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); max-width: 450px;
+            width: 100%; display: flex; flex-direction: column;
+            align-items: center; border: 1px solid var(--border-main);
+        }
+        .user-photo {
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 3px solid var(--accent-main); object-fit: cover; margin-bottom: 1rem;
+        }
+        .user-name {
+            font-family: 'Poppins', sans-serif; font-size: 1.75rem;
+            font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;
+        }
+        .user-bio {
+            font-size: 1rem; color: var(--text-secondary); margin-bottom: 1.5rem;
+        }
+        .link-container { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
+        .nav-option {
+            display: block; width: 100%; padding: 1rem; background-color: var(--surface-alt);
+            color: var(--text-main); text-decoration: none; border-radius: 0.75rem;
+            font-size: 1rem; font-weight: 600; border: 1px solid var(--border-main);
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-option:hover { background-color: var(--surface-alt-hover); transform: translateY(-2px); }
+        .nav-highlight {
+            background: linear-gradient(135deg, var(--accent-main), var(--accent-hover));
+            color: white; border: none; font-weight: 700;
+        }
+        .footer-text { margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="content-module">
+        <img src="images/IMG_7187.jpeg" alt="Profil Terka" class="user-photo">
+        <h1 class="user-name">Terka</h1>
+        <p class="user-bio">Vítej. Zde najdeš vše podstatné.</p>
+        
+        <div class="link-container">
+            <a href="./gate.html" target="_blank" rel="noopener noreferrer" class="nav-option nav-highlight">Moje exkluzivní zóna</a>
+
+            <a href="https://www.youtube.com/watch?v=Ja65iMf4Ors&ab_channel=Datarunlife" target="_blank" rel="noopener noreferrer" class="nav-option">Kdo jsem? (Rozhovor)</a>
+            <a href="https://www.youtube.com/shorts/RbatKStCZxo" target="_blank" rel="noopener noreferrer" class="nav-option">Sleduj mě na YouTube</a>
+            <a href="https://www.tiktok.com/@terezosladilova/video/7488800063859313942" target="_blank" rel="noopener noreferrer" class="nav-option">Ze zákulisí na TikToku</a>
         </div>
-        <footer class="page-footer"><p>© <span id="current-year"></span> Terka</p></footer>
+        
+        <footer class="footer-text">
+            <p>© <span id="year"></span> Terka</p>
+        </footer>
     </div>
-    <script>document.getElementById('current-year').textContent = new Date().getFullYear();</script></body></html>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
