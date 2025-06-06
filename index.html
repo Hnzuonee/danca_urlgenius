@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniela - Vstupte</title>
+    <style>
+        :root {
+            --primary-color: #ff69b4; /* Hot pink */
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --card-color: #1e1e1e;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://via.placeholder.com/1080x1920/000000/FFFFFF?text=Vložte+obrázek+na+pozadí'); /* <-- ZDE VLOŽTE ODKAZ NA OBRÁZEK POZADÍ */
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.5);
+            transform: scale(1.1);
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            background: var(--card-color);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 var(--shadow-color);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .link-button {
+            display: block;
+            padding: 15px;
+            background: var(--primary-color);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .link-button:hover {
+            background-color: #ff85c1;
+            transform: scale(1.05);
+        }
+
+        /* Age Gate Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none; /* Initially hidden */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-color);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 0 20px var(--shadow-color);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .modal-content p {
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .modal-button:hover {
+            transform: scale(1.05);
+        }
+
+        .yes-button {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+        }
+
+        .no-button {
+            background-color: #555;
+            color: var(--text-color);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="background"></div>
+
+    <div class="content-container">
+        <img src="https://via.placeholder.com/150/FF69B4/FFFFFF?text=Daniela" alt="Daniela" class="profile-pic">
+        <h1>Daniela</h1>
+        <p>Moje nejlepší videa & exkluzivní obsah</p>
+
+        <div class="links">
+            <a href="https://www.tiktok.com/@daniela.navida/video/7483926766201998614" target="_blank" class="link-button">TikTok Video 1</a>
+            <a href="https://www.tiktok.com/@daniela.navida/video/7478711480712547606" target="_blank" class="link-button">TikTok Video 2</a>
+            <a href="https://www.tiktok.com/@daniela.navida/video/7480062391942728982" target="_blank" class="link-button">TikTok Video 3</a>
+            <a href="#" id="final-destination-button" class="link-button">Exkluzivní obsah zde</a>
+        </div>
+    </div>
+
+    <div id="age-gate-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Ověření věku</h2>
+            <p>Pro vstup na tuto stránku musíte potvrdit, že je vám 18 a více let.</p>
+            <div class="modal-buttons">
+                <button id="age-confirm-yes" class="modal-button yes-button">Ano, je mi 18+</button>
+                <button id="age-confirm-no" class="modal-button no-button">Ne, odejít</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const finalDestinationUrl = 'https://onlyfans.com/justdaniela';
+        const exitUrl = 'https://www.google.com';
+
+        const modal = document.getElementById('age-gate-modal');
+        const openModalButton = document.getElementById('final-destination-button');
+        const confirmYesButton = document.getElementById('age-confirm-yes');
+        const confirmNoButton = document.getElementById('age-confirm-no');
+
+        // Otevření modálního okna
+        openModalButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Zabrání výchozí akci odkazu
+            modal.style.display = 'flex';
+        });
+
+        // Potvrzení věku a přesměrování
+        confirmYesButton.addEventListener('click', () => {
+            window.location.href = finalDestinationUrl;
+        });
+
+        // Odmítnutí a přesměrování pryč
+        confirmNoButton.addEventListener('click', () => {
+            window.location.href = exitUrl;
+        });
+    </script>
+
+</body>
+</html>
