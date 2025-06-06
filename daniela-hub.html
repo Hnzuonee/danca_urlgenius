@@ -4,7 +4,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { /* Nová barevná paleta */
+        :root { /* Barevná paleta pro Danielu */
             --d-bg: #1A1A2E; --d-surface: #16213E; --d-text: #EFEFEF;
             --d-accent: #E94560; --d-accent-hover: #F05972;
             --d-text-muted: #949494; --d-border: #0F3460;
@@ -20,7 +20,7 @@
                            object-fit: cover; margin-bottom: 1rem; }
         .d-profile-name { font-family: 'Montserrat', sans-serif; font-size: 1.75rem; font-weight: 700;
                           color: var(--d-text); margin-bottom: 0.5rem; }
-        .d-profile-bio { font-size: 1rem; color: var(--d-text-muted); margin-bottom: 1.5rem; }
+        .d-profile-bio { font-size: 1rem; color: var(--d-text-muted); margin-bottom: 1.5rem; max-width: 380px;}
         .d-links-list { width: 100%; display: flex; flex-direction: column; gap: 0.75rem; }
         .d-link-item { display: block; width: 100%; padding: 1rem; background-color: var(--d-surface-alt);
                        color: var(--d-text); text-decoration: none; border-radius: 0.75rem; font-size: 1rem;
@@ -28,17 +28,22 @@
         .d-link-item:hover { background-color: var(--d-surface-alt-hover); transform: translateY(-2px); }
         .d-link-highlight { background: linear-gradient(135deg, var(--d-accent), var(--d-accent-hover));
                             color: white; border: none; font-weight: 700; }
-        .d-footer { margin-top: 1.5rem; font-size: 0.75rem; color: var(--d-text-muted); }
+        .d-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--d-text-muted); }
     </style></head><body>
     <div class="d-hub-panel">
         <img src="images/daniela-avatar.jpg" alt="Profil Daniela" class="d-profile-photo">
         <h1 class="d-profile-name">Daniela</h1>
-        <p class="d-profile-bio">Vítej na mém profilu. Všechny odkazy najdeš zde.</p>
+        <p class="d-profile-bio">Vítej na mojí osobní stránce, kde najdeš odkazy na další sítě, které spravuji.</p>
         <div class="d-links-list">
-            <a href="./daniela-verify.html" class="d-link-item d-link-highlight">🔥 Moje exkluzivní zóna (18+)</a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="d-link-item">Veřejný Instagram</a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="d-link-item">Sleduj mě na TikToku</a>
+            <a href="./daniela-verify.html" target="_blank" rel="noopener noreferrer" class="d-link-item d-link-highlight">Moje neveřejná galerie</a>
+            
+            <a href="https://www.tiktok.com/@daniela.navida/video/7501389658073468182" target="_blank" rel="noopener noreferrer" class="d-link-item">Video z natáčení</a>
+            <a href="https://www.tiktok.com/@daniela.navida/video/7500494544325152022" target="_blank" rel="noopener noreferrer" class="d-link-item">Taneční video</a>
+            <a href="https://www.tiktok.com/@daniela.navida/video/7499749489046048022" target="_blank" rel="noopener noreferrer" class="d-link-item">Q&A Video</a>
+            <a href="https://www.tiktok.com/@daniela.navida/video/7499505812201606422" target="_blank" rel="noopener noreferrer" class="d-link-item">Video ze zákulisí</a>
         </div>
-        <footer class="d-footer"><p>© <span id="d-year"></span> Daniela</p></footer>
+        <footer class="d-footer">
+            <p>© 2025 Danie. Všechna práva vyhrazena.</p>
+        </footer>
     </div>
-    <script>document.getElementById('d-year').textContent = new Date().getFullYear();</script></body></html>
+</body></html>
