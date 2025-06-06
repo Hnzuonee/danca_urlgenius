@@ -15,6 +15,7 @@
                     const logData = { session_key: sessionKey, clientAgent: navigator.userAgent,
                                       source_page: window.location.href, client_timestamp: new Date().toISOString(),
                                       ...metadata };
+                    // KRITICKÝ BOD: Cesta k funkci MUSÍ odpovídat názvu souboru v netlify/functions/
                     await fetch('/.netlify/functions/log-activity', { method: 'POST',
                         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(logData) });
                 } catch (err) { console.warn('Activity logging failed:', err); }
@@ -61,8 +62,7 @@
         .section-hidden { display: none !important; }
     </style></head><body>
     <div class="check-panel">
-<img src="images/IMG_1478.JPG" alt="Profil Terka" class="check-avatar">
-        
+        <img src="images/IMG_1478.JPG" alt="Profil Terka" class="check-avatar">
         <div id="age-prompt-section">
           <h1 class="check-title">Vstup pouze pro dospělé</h1>
           <p class="check-description">Potvrďte prosím, že vám bylo 18 a více let, abyste mohli pokračovat.</p>
@@ -72,7 +72,6 @@
           </div>
           <p id="rejection-message" class="reject-notice section-hidden">Vstup zamítnut. Přístup je povolen pouze osobám starším 18 let.</p>
         </div>
-
         <div id="confirm-success-section" class="section-hidden">
           <h1 class="check-title">Ověření proběhlo úspěšně</h1>
           <p class="check-description">Děkujeme. Nyní budete přesměrováni na exkluzivní obsah.</p>
@@ -87,20 +86,17 @@
           const noButton = document.getElementById('deny-age-button');
           const rejectionNotice = document.getElementById('rejection-message');
           const redirectLink = document.getElementById('destination-url-link');
-
           if (window.logUserAction) window.logUserAction({activity: 'verification_page_view'});
-
           yesButton.addEventListener('click', async () => {
             promptSection.classList.add('section-hidden');
             successSection.classList.remove('section-hidden');
             if (window.logUserAction) window.logUserAction({activity: 'verification_check', verification_response: 'yes'});
-            
             try {
+                // KRITICKÝ BOD: Cesta k funkci MUSÍ odpovídat názvu souboru v netlify/functions/
                 const response = await fetch('/.netlify/functions/get-destination'); 
                 if (!response.ok) throw new Error('Network error');
                 const data = await response.json();
-                
-                if (data.redirectUrl) { // Změněno z data.target na data.redirectUrl
+                if (data.redirectUrl) {
                     redirectLink.href = data.redirectUrl;
                     redirectLink.textContent = 'Přejít na můj profil'; 
                 } else { throw new Error('Redirect URL not found in response'); }
@@ -109,7 +105,6 @@
                 console.error('Failed to fetch destination URL:', err);
             }
           });
-
           noButton.addEventListener('click', () => {
             promptSection.querySelector('.check-title').classList.add('section-hidden');
             promptSection.querySelector('.check-description').classList.add('section-hidden');
