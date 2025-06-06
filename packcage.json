@@ -1,6 +1,6 @@
 {
-  "name": "profile-gateway-project",
-  "version": "1.0.1",
+  "name": "daniela-funnel-project",
+  "version": "1.0.0",
   "dependencies": {
     "node-fetch": "^2.6.7"
   }
