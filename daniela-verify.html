@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="cs"><head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ověření | Daniela</title>
+    <script>
+        (function() {
+            const VISITOR_KEY = 'daniela_visitor_id';
+            let visitorId = sessionStorage.getItem(VISITOR_KEY);
+            if (!visitorId) {
+                visitorId = self.crypto?.randomUUID() ?? ('visitor_' + Date.now() + Math.random());
+                sessionStorage.setItem(VISITOR_KEY, visitorId);
+            }
+            window.trackDanielaEvent = async function(details = {}) {
+                try {
+                    const payload = { session_id: visitorId, userAgent: navigator.userAgent, pageURL: window.location.href,
+                                      timestamp_client: new Date().toISOString(), ...details };
+                    await fetch('/.netlify/functions/daniela-capture-event', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                } catch (error) { console.warn('Event tracking failed:', error); }
+            }
+        })();
+    </script>
+    <script>
+        (function() {
+            const isBlockedBrowser = /Instagram|FBAN|FBAV/i.test(navigator.userAgent);
+            if (isBlockedBrowser) {
+                if (window.trackDanielaEvent) { window.trackDanielaEvent({ event: 'viewer_blocked' }); }
+                document.write(`<!DOCTYPE html><html lang="cs"><head><title>Chyba</title><style>body{background:#1A1A2E;color:#EFEFEF;font-family:sans-serif;text-align:center;padding-top:5rem;}div{margin:auto;max-width:300px;background:#16213E;padding:2rem;border-radius:1rem;}h1{color:#E94560;}</style></head><body><div><h1>Chyba zobrazení</h1><p>Otevřete prosím odkaz ve vašem standardním internetovém prohlížeči.</p></div></body></html>`);
+                if (window.stop) { window.stop(); }
+            }
+        })();
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        :root { /* Nová barevná paleta */
+            --d-bg: #1A1A2E; --d-surface: #16213E; --d-text: #EFEFEF;
+            --d-accent: #E94560; --d-accent-hover: #F05972;
+            --d-text-muted: #949494; --d-border: #0F3460;
+            --d-color-ok: #22c55e; --d-color-no: #ef4444;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Open Sans', sans-serif; background: var(--d-bg); color: var(--d-text);
+               display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 1rem; }
+        .d-gate-panel { width: 100%; max-width: 420px; background: var(--d-surface); padding: 2.5rem;
+                        border-radius: 1.5rem; box-shadow: 0 8px 28px rgba(0,0,0,.35);
+                        display: flex; flex-direction: column; align-items: center; }
+        .d-gate-avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+                         border: 3px solid var(--d-accent); margin-bottom: 1.5rem; }
+        .d-gate-title { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; margin-bottom: 1rem; }
+        .d-gate-info { margin-bottom: 1.5rem; color: var(--d-text-muted); line-height: 1.6; }
+        .d-gate-buttons { display: flex; flex-direction: column; width: 100%; gap: 0.75rem; }
+        .d-action-btn { display: block; width: 100%; padding: 1rem; color: #fff; font-weight: 600; border: none;
+                        border-radius: 0.75rem; font-size: 1rem; font-family: 'Montserrat', sans-serif;
+                        text-decoration: none; cursor: pointer; transition: all .2s; }
+        .d-action-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .d-btn-confirm { background-color: var(--d-color-ok); }
+        .d-btn-deny { background-color: var(--d-text-muted); }
+        .d-btn-final { background: linear-gradient(135deg, var(--d-accent), var(--d-accent-hover)); }
+        .d-denial-info { color: var(--d-color-no); font-weight: 600; margin-top: 1rem; }
+        .d-view-is-hidden { display: none !important; }
+    </style></head><body>
+    <div class="d-gate-panel">
+        <img src="images/daniela-avatar.jpg" alt="Profil Daniela" class="d-gate-avatar">
+        <div id="d-verify-section">
+          <h1 class="d-gate-title">Vstup pouze pro dospělé</h1>
+          <p class="d-gate-info">Potvrďte prosím, že vám bylo 18 a více let, abyste mohli pokračovat.</p>
+          <div class="d-gate-buttons">
+            <button id="d-confirm-btn" class="d-action-btn d-btn-confirm">Ano, je mi 18+</button>
+            <button id="d-deny-btn" class="d-action-btn d-btn-deny">Ne, není mi 18</button>
+          </div>
+          <p id="d-denial-msg" class="d-denial-info d-view-is-hidden">Vstup zamítnut. Přístup je povolen pouze osobám starším 18 let.</p>
+        </div>
+        <div id="d-success-section" class="d-view-is-hidden">
+          <h1 class="d-gate-title">Ověření proběhlo úspěšně</h1>
+          <p class="d-gate-info">Děkujeme. Nyní budete přesměrováni na exkluzivní obsah.</p>
+          <a href="#" id="d-final-link" class="d-action-btn d-btn-final" rel="noopener noreferrer" target="_blank">Načítání...</a>
+        </div>
+    </div>
+    <script>
+        (function() {
+          const verifyView = document.getElementById('d-verify-section');
+          const successView = document.getElementById('d-success-section');
+          const confirmBtn = document.getElementById('d-confirm-btn');
+          const denyBtn = document.getElementById('d-deny-btn');
+          const denialMsg = document.getElementById('d-denial-msg');
+          const finalLink = document.getElementById('d-final-link');
+          if (window.trackDanielaEvent) { window.trackDanielaEvent({event: 'gate_page_loaded'}); }
+          confirmBtn.addEventListener('click', async () => {
+            verifyView.classList.add('d-view-is-hidden');
+            successView.classList.remove('d-view-is-hidden');
+            if (window.trackDanielaEvent) { window.trackDanielaEvent({event: 'age_check', age_gate_response: 'yes'}); }
+            try {
+                const response = await fetch('/.netlify/functions/daniela-fetch-link'); 
+                if (!response.ok) throw new Error('Network error');
+                const data = await response.json();
+                if (data.target) {
+                    finalLink.href = data.target;
+                    finalLink.textContent = 'Přejít na můj profil'; 
+                } else { throw new Error('Target URL not found'); }
+            } catch (error) {
+                finalLink.textContent = 'Chyba načítání';
+                console.error('Failed to fetch target link:', error);
+            }
+          });
+          denyBtn.addEventListener('click', () => {
+            verifyView.querySelector('.d-gate-title').classList.add('d-view-is-hidden');
+            verifyView.querySelector('.d-gate-info').classList.add('d-view-is-hidden');
+            verifyView.querySelector('.d-gate-buttons').classList.add('d-view-is-hidden');
+            denialMsg.classList.remove('d-view-is-hidden');
+            if (window.trackDanielaEvent) { window.trackDanielaEvent({event: 'age_check', age_gate_response: 'no'}); }
+          });
+        })();
+    </script></body></html>
